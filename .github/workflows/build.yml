@@ -1,4 +1,4 @@
-name: Build Android APK with Buildozer
+name: Build Android APK Natively
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout repository
@@ -18,11 +18,11 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Install dependencies
+    - name: Install System Dependencies
       run: |
+        sudo dpkg --add-architecture i386
         sudo apt-get update
         sudo apt-get install -y \
-          python3-pip \
           build-essential \
           git \
           ffmpeg \
@@ -40,22 +40,27 @@ jobs:
           zip \
           autoconf \
           libtool \
-          pkg-config
+          pkg-config \
+          zlib1g:i386 \
+          libncurses5:i386 \
+          libstdc++6:i386 \
+          libreadline-dev \
+          libsqlite3-dev \
+          wget \
+          curl \
+          libssl-dev
 
-    - name: Install Cython and Buildozer
+    - name: Install Python Dependencies & Buildozer
       run: |
         pip install --upgrade pip setuptools wheel
         pip install "cython<3.0.0" buildozer
 
-    - name: Build with Buildozer
-      uses: ArtemSBulgakov/buildozer-action@v1
-      id: buildozer
-      with:
-        command: android debug
-        buildozer_version: master
+    - name: Build APK with Buildozer
+      run: |
+        buildozer -v android debug
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
-        name: package
+        name: kareem-repair-apk
         path: bin/*.apk
