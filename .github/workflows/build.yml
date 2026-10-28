@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
 
     steps:
     - name: Checkout repository
@@ -55,11 +56,6 @@ jobs:
         pip install --upgrade pip setuptools wheel
         pip install "cython<3.0.0" buildozer
 
-    - name: Accept Android SDK Licenses
-      run: |
-        mkdir -p $HOME/.android
-        sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk --licenses || true
-
     - name: Build APK with Buildozer
       run: |
         buildozer -v android debug
@@ -67,5 +63,5 @@ jobs:
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
-        name: kareem-repair-v2
+        name: kareem-repair-apk-final
         path: bin/*.apk
