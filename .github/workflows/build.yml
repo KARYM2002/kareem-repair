@@ -58,10 +58,10 @@ jobs:
 
     - name: Build APK with Buildozer
       run: |
-        buildozer -v android debug
+        buildozer android debug
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
-        name: kareem-repair-apk-final
+        name: kareem-repair-apk
         path: bin/*.apk
