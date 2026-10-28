@@ -15,4 +15,4 @@ android.api = 31
 android.min_api = 21
 android.ndk = 25b
 android.build_tools_version = 33.0.0
-android.sdk_exclude_packages = build-tools;37.0.0,platforms;android-37
+android.accept_sdk_license = True
